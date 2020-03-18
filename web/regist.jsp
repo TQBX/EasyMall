@@ -87,7 +87,21 @@
                 };
                 //鼠标离焦事件
                 $("input[name='username']").blur(function () {
-                    formObj.checkNull("username", "用户名不能为空");
+                    var username = $("input[name='username']").val();
+                    if(!formObj.checkNull("username", "用户名不能为空")){
+                        //如果为空
+                        $("#username_msg").text("");
+                        return;
+                    }
+
+                    //ajax实现，鼠标离开用户名之后去数据库完成查重操作
+                    $("#username").load(
+                        "<%=request.getContextPath()%>/AjaxCheckUsernameServlet",
+                        {"username":username}
+                    );
+
+                        $("#username_msg").text("");
+
                 });
                 $("input[name='password']").blur(function () {
                     formObj.checkNull("password", "密码不能为空");
@@ -101,11 +115,19 @@
                     formObj.checkEmail();
                 });
                 $("input[name='nickname']").blur(function () {
-                    formObj.checkNull("nickname", "邮箱不能为空");
+                    formObj.checkNull("nickname", "昵称不能为空");
                 });
                 $("input[name='valistr']").blur(function () {
-                    formObj.checkNull("valistr", "验证码不能为空");
+                       if(!formObj.checkNull("valistr", "验证码不能为空")){
+                           $("#validate_msg").text("");
+                       }
                 });
+
+                //点击图片切换
+                $("#img").click(function () {
+                    this.src = "<%=request.getContextPath()%>/validateServlet?time="+new Date().getTime();
+                })
+
             })
 
 
@@ -121,21 +143,22 @@
                 <%--    </td>--%>
                 <%--</tr>--%>
                 <tr>
-                    <td class="tds">用户名：</td>
+                    <td class="tds"><label for="username_input">用户名：</label></td>
                     <td>
-                        <input type="text" name="username"
-                               value="<%=request.getParameter("username")==null?"":request.getParameter("username")%>"/>
-                        <span></span>
+                            <input type="text" name="username" id="username_input" placeholder="请输入用户名"
+                                   value="<%=request.getParameter("username")==null?"":request.getParameter("username")%>"/>
+
+                        <span id="username"></span>
                     </td>
                     <td>
-                        <span><%=request.getAttribute("user_msg") == null ? "" : request.getAttribute("user_msg")%></span>
+                        <span id="username_msg"><%=request.getAttribute("user_msg") == null ? "" : request.getAttribute("user_msg")%></span>
                     </td>
                 </tr>
 
                 <tr>
-                    <td class="tds">密码：</td>
+                    <td class="tds"><label for="pas_input">密码：</label></td>
                     <td>
-                        <input type="password" name="password"/>
+                        <input id="pas_input" type="password" name="password" placeholder="请输入密码"/>
                         <span></span>
                     </td>
                     <td>
@@ -143,9 +166,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tds">确认密码：</td>
+                    <td class="tds"><label for="pas2_input">确认密码：</label></td>
                     <td>
-                        <input type="password" name="password2"/>
+                        <input id="pas2_input" type="password" name="password2" placeholder="请确认密码"/>
                         <span></span>
                     </td>
                     <td>
@@ -153,9 +176,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tds">昵称：</td>
+                    <td class="tds"><label for="nickname_input">昵称：</label></td>
                     <td>
-                        <input type="text" name="nickname"
+                        <input type="text" name="nickname" id="nickname_input" placeholder="请输入昵称"
                                value="<%=request.getParameter("nickname")==null?"":request.getParameter("nickname")%>"/>
                         <span></span>
                     </td>
@@ -164,9 +187,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tds">邮箱：</td>
+                    <td class="tds"><label for="email_input">邮箱：</label></td>
                     <td>
-                        <input type="text" name="email"
+                        <input type="text" name="email" id="email_input" placeholder="请输入邮箱"
                                value="<%=request.getParameter("email")==null?"":request.getParameter("email")%>"/>
                         <span></span>
                     </td>
@@ -175,15 +198,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tds">验证码：</td>
+                    <td class="tds"><label for="validate_input">验证码：</label></td>
                     <td>
-                        <input type="text" name="valistr"
+                        <input type="text" name="valistr" id="validate_input" placeholder="请输入验证码"
                                value="<%=request.getParameter("valistr")==null?"":request.getParameter("valistr")%>"/>
-                        <img src="<%=request.getContextPath()%>/img/regist/yzm.jpg" width="" height="" alt=""/>
+                        <img src="<%=request.getContextPath()%>/validateServlet" id="img" width="" height="" alt="验证码"/>
                         <span></span>
                     </td>
                     <td>
-                        <span><%=request.getAttribute("validate_msg") == null ? "" : request.getAttribute("validate_msg")%></span>
+                        <span id="validate_msg"><%=request.getAttribute("validate_msg") == null ? "" : request.getAttribute("validate_msg")%></span>
                     </td>
                 </tr>
                 <tr>

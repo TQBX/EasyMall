@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
@@ -36,13 +37,41 @@ public class RegistServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+        String valistr = request.getParameter("valistr");
+
+
+        //验证码非空校验
+        if (StringUtils.isEmpty(valistr)) {
+            //注册页面提示，用户名称不能为空
+            request.setAttribute("validate_msg", "验证码不能为空");
+            //请求转发到注册页面，可以共享数据
+            request.getRequestDispatcher("/regist.jsp").forward(request, response);
+
+            //打断下方代码
+            return;
+        }
+        //获取session中的验证码
+        HttpSession session = request.getSession();
+        String code = (String) session.getAttribute("code");
+        session.removeAttribute("code");
+
+        if(!StringUtils.equalsIgnoreCase(code,valistr)){
+            //注册页面提示，用户名称不能为空
+            request.setAttribute("validate_msg", "验证码错误");
+            //请求转发到注册页面，可以共享数据
+            request.getRequestDispatcher("/regist.jsp").forward(request, response);
+
+            //打断下方代码
+            return;
+        }
+
         //获取用户发送的参数信息
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String password2 = request.getParameter("password2");
         String nickname = request.getParameter("nickname");
         String email = request.getParameter("email");
-        String valistr = request.getParameter("valistr");
+
         //非空校验
         if (StringUtils.isEmpty(username)) {
             //注册页面提示，用户名称不能为空
@@ -93,16 +122,7 @@ public class RegistServlet extends HttpServlet {
             //打断下方代码
             return;
         }
-        //非空校验
-        if (StringUtils.isEmpty(valistr)) {
-            //注册页面提示，用户名称不能为空
-            request.setAttribute("validate_msg", "验证码不能为空");
-            //请求转发到注册页面，可以共享数据
-            request.getRequestDispatcher("/regist.jsp").forward(request, response);
 
-            //打断下方代码
-            return;
-        }
 
         //邮箱格式^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$
         String reg = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
