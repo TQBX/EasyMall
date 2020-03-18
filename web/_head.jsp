@@ -4,7 +4,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE HTML>
-<link rel="stylesheet" href="css/head.css"/>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/head.css"/>
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
 
 <div id="common_head">
@@ -14,14 +14,14 @@
         </div>
     </div>
     <div id="line2">
-        <img id="logo" src="img/head/logo.jpg" alt="按钮"/>
+        <img id="logo" src="<%=request.getContextPath()%>/img/head/logo.jpg" alt="按钮"/>
         <input type="text" name=""/>
         <input type="button" value="搜 索"/>
         <span id="goto">
 			<a id="goto_order" href="#">我的订单</a>
 			<a id="goto_cart" href="#">我的购物车</a>
 		</span>
-        <img id="erwm" src="img/head/qr.jpg"/>
+        <img id="erwm" src="<%=request.getContextPath()%>/img/head/qr.jpg"/>
     </div>
     <div id="line3">
         <div id="content">

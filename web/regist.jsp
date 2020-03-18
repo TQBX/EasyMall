@@ -8,7 +8,7 @@
     <head>
         <title>欢迎注册EasyMall</title>
         <meta http-equiv="Content-type" content="text/html; charset=UTF-8"/>
-        <link rel="stylesheet" href="css/regist.css"/>
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/css/regist.css"/>
 
         <style>
 
@@ -20,11 +20,12 @@
             }
 
         </style>
-        <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.4.2.min.js"></script>
 
         <script>
 
             var formObj;
+            //文档就绪事件
             $(function () {
 
                 //前台校验
@@ -84,7 +85,27 @@
                         $("input[name='" + name + "']").nextAll("span").text(msg).css("color", "purple");
                     }
                 };
-
+                //鼠标离焦事件
+                $("input[name='username']").blur(function () {
+                    formObj.checkNull("username", "用户名不能为空");
+                });
+                $("input[name='password']").blur(function () {
+                    formObj.checkNull("password", "密码不能为空");
+                });
+                $("input[name='password2']").blur(function () {
+                    formObj.checkNull("password2", "确认密码不能为空");
+                    formObj.checkPassword();
+                });
+                $("input[name='email']").blur(function () {
+                    formObj.checkNull("email", "邮箱不能为空");
+                    formObj.checkEmail();
+                });
+                $("input[name='nickname']").blur(function () {
+                    formObj.checkNull("nickname", "邮箱不能为空");
+                });
+                $("input[name='valistr']").blur(function () {
+                    formObj.checkNull("valistr", "验证码不能为空");
+                });
             })
 
 
@@ -158,7 +179,7 @@
                     <td>
                         <input type="text" name="valistr"
                                value="<%=request.getParameter("valistr")==null?"":request.getParameter("valistr")%>"/>
-                        <img src="img/regist/yzm.jpg" width="" height="" alt=""/>
+                        <img src="<%=request.getContextPath()%>/img/regist/yzm.jpg" width="" height="" alt=""/>
                         <span></span>
                     </td>
                     <td>
