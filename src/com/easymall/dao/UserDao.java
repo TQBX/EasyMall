@@ -22,7 +22,7 @@ public class UserDao {
     public User login(User loginUser){
         try {
             //编写sql
-            String sql = "select * from user where name = ? and password = ?";
+            String sql = "select * from user where username = ? and password = ?";
 
             //调用query方法
             return template.queryForObject
